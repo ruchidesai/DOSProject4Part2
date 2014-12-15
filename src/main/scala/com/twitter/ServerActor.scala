@@ -12,7 +12,7 @@ class ServerActor extends Actor {
   def receive = {
     case Tweet(id, tweet_type, name, msg, requestContext) =>
 	  val time_stamp = System.currentTimeMillis
-	  var home_page_entry = new HomePageEntry(time_stamp, id, msg)
+	  val home_page_entry = new HomePageEntry(time_stamp, id, msg)
 	  Main.home_pages(id) += home_page_entry
 	  tweet_type match {
 		  case 0 =>
@@ -25,7 +25,8 @@ class ServerActor extends Actor {
 			}
 				
 		  case 1 =>
-		    Main.mentions_feeds(name) += msg
+		    val mention_feed_entry = new MentionFeedEntry(time_stamp, id, msg)
+		    Main.mentions_feeds(name) += mention_feed_entry
 			var common_followers = Main.follower_mapping(id).intersect(Main.follower_mapping(name))
 			if(common_followers.size > 0) {
 			  for(j <- common_followers) {
@@ -38,18 +39,21 @@ class ServerActor extends Actor {
 			}
 
           case 2 =>
+		    val mention_feed_entry = new MentionFeedEntry(time_stamp, id, msg)
 		    if(Main.follower_mapping(id).size > 0) {
 			  for(j <- Main.follower_mapping(id)) {
 			    Main.home_pages(j) += home_page_entry
 			    if(Main.home_pages(j).size > 100)
 			      Main.home_pages(j).drop(Main.home_pages(j).size - 100)
 			  }			
-			  Main.mentions_feeds(name) += msg
+			  Main.mentions_feeds(name) += mention_feed_entry
 			  if(Main.mentions_feeds(name).size > 50)
 			    Main.mentions_feeds(name).drop(Main.mentions_feeds(name).size - 50)
 			}
 		}
-	  requestContext.complete(HttpResponse(entity = "Done"))
+	  var json_tweet = ""
+	  json_tweet += home_page_entry.toJson
+	  requestContext.complete(HttpResponse(entity = json_tweet))
 	
 	case HomePage(id, requestContext) =>
 	  var reply = Main.home_pages(id)
@@ -64,7 +68,7 @@ class ServerActor extends Actor {
 	  var reply = Main.mentions_feeds(id)
 	  var json_reply = ""
 	  for(item <- reply) {
-	    json_reply += item.toJson
+	    json_reply += "\n" + item.toJson
 	  }
 	  requestContext.complete(HttpResponse(entity = json_reply))
   }

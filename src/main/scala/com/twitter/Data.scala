@@ -66,10 +66,10 @@ object OurData {
 	return home_pages
   }
 	
-  def initialize_mentionsfeeds(no_of_actors: Int): Array[Queue[String]] = {
-    var mentions_feeds = new Array[Queue[String]](no_of_actors)
+  def initialize_mentionsfeeds(no_of_actors: Int): Array[Queue[MentionFeedEntry]] = {
+    var mentions_feeds = new Array[Queue[MentionFeedEntry]](no_of_actors)
 	for(i <- 0 until (no_of_actors))
-	  mentions_feeds(i) = new Queue[String]
+	  mentions_feeds(i) = new Queue[MentionFeedEntry]
 	println("...")
 	return mentions_feeds
   }
