@@ -6,7 +6,10 @@ import spray.can.Http
  
 object Main extends App {
 
-    var something = "Hello"
+    val no_of_users = 100000
+	val follower_mapping = OurData.create_follower_mappings(no_of_users)
+	var home_pages = OurData.initialize_homepages(no_of_users)
+	var mentions_feeds = OurData.initialize_mentionsfeeds(no_of_users)
  
     implicit val system = ActorSystem("TwitterSystem")
  

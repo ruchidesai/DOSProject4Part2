@@ -12,24 +12,21 @@ class SprayServer extends Actor with SprayService{
   
   def receive = runRoute(sprayTwitterRoute)
  
-  /*def receive = {
-    case _:Http.Connected => sender ! Http.Register(self)
- 
-    case HttpRequest(GET, Uri.Path("/ping"), _, _, _) =>
-      sender ! HttpResponse(entity = Main.something)
-  }*/
- 
 }
 
 trait SprayService extends HttpService {
   val serveractor = actorRefFactory.actorOf(Props[ServerActor])
   val sprayTwitterRoute =
-    path("ping") {
+    path("tweet" / IntNumber / IntNumber / IntNumber / Segment) { (id, tweet_type, name, msg) =>
 	  requestContext =>
-	    serveractor ! Ping(requestContext)
+	    serveractor ! Tweet(id, tweet_type, name, msg, requestContext)
     } ~
-	path("pong") {
+	path("homepage" / IntNumber) { (id) =>
 	  requestContext =>
-	    serveractor ! Pong(requestContext)
+	    serveractor ! HomePage(id, requestContext)
+	} ~
+	path("mentionsfeed" /IntNumber) { (id) =>
+	  requestContext =>
+	    serveractor ! MentionsFeed(id, requestContext)
 	}
 }
