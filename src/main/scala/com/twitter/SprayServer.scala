@@ -28,5 +28,9 @@ trait SprayService extends HttpService {
 	path("mentionsfeed" /IntNumber) { (id) =>
 	  requestContext =>
 	    serveractor ! MentionsFeed(id, requestContext)
+	} ~
+	path("getTweet" / IntNumber) { (id) =>
+	  requestContext =>
+	    serveractor ! HomePage(id, requestContext)
 	}
 }

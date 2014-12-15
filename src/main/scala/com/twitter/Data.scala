@@ -58,10 +58,10 @@ object OurData {
 	return follower_mapping
   }
   
-  def initialize_homepages(no_of_actors: Int): Array[Queue[String]] = {
-    var home_pages = new Array[Queue[String]](no_of_actors)
+  def initialize_homepages(no_of_actors: Int): Array[Queue[HomePageEntry]] = {
+    var home_pages = new Array[Queue[HomePageEntry]](no_of_actors)
 	for(i <- 0 until no_of_actors)
-	  home_pages(i) = new Queue[String]
+	  home_pages(i) = new Queue[HomePageEntry]
 	println("...")
 	return home_pages
   }
