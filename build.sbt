@@ -2,7 +2,7 @@ name := "TwitterSystem"
  
 version := "0.1-SNAPSHOT"
  
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
  
 resolvers ++= Seq(
     "spray repo" at "http://repo.spray.io/"
@@ -16,6 +16,7 @@ libraryDependencies ++= {
     Seq(
         "io.spray" % "spray-can" % sprayV,
         "io.spray" % "spray-routing" % sprayV,
-        "com.typesafe.akka" %% "akka-actor" % akkaV
+		"io.spray" %% "spray-json" % sprayV,
+		"com.typesafe.akka" %% "akka-actor" % akkaV
     )
 }
